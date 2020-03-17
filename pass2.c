@@ -20,20 +20,23 @@
 
 #include "assembler.h"
 
-/* Declaration of stub function defined later in this file. */
-void processInstruction(char * instName, char * restOfInstruction,
-                        int lineNum, int PC);
+/* The following stub declaration should be removed once stub has been replaced
+ * by real code.
+ */
+void stub(char * restOfInstruction, int lineNum);
 
 void pass2 (FILE * fp, LabelTable table)
   /* returns a copy of the label table that was constructed */
 {
-    int    lineNum;                /* line number */
-    int    PC = 0;                 /* program counter */
-    char * tokBegin, * tokEnd;     /* used to step thru inst */
-    char   inst[BUFSIZ];           /* will hold instruction; BUFSIZ
-                                      is max size of I/O buffer
-                                      (defined in stdio.h) */
-    char * instrName;              /* instruction name (e.g., "add") */
+    int    lineNum;            /* line number */
+    int    PC = 0;             /* program counter */
+    char   inst[BUFSIZ];       /* will hold instruction; BUFSIZ is max size
+                                    of I/O buffer (defined in stdio.h) */
+    char * instrName;          /* instruction name (e.g., "add") */
+    char * restOfInstruction;  /* rest of instruction (e.g., "$t0, $t1, $t2") */
+
+    char format;               /* Is instruction 'R', 'I', or 'J'? */
+    int code;                  /* opcode or funct code, depending on format */
 
     /* Continuously read next line of input until EOF is encountered.
      */
@@ -41,72 +44,136 @@ void pass2 (FILE * fp, LabelTable table)
     {
         PC += 4;
 
-        /* If the line starts with a comment, move on to next line.
-         * If there's a comment later in the line, strip it off
-         *  (replace the '#' with a null byte).
+        /* Separate the instruction name from the rest of the statement.
+         * If the line does not have an instruction, move on to next line.
          */
-        if ( *inst == '#' ) continue;
-        (void) strtok (inst, "#");
-
-        /* Read the first token, skipping any leading whitespace. */
-        tokBegin = inst;
-        getToken (&tokBegin, &tokEnd);
-            /* tokBegin now points to 1st non-whitespace character
-             * in the token and tokEnd points to 1st punctuation mark
-             * or whitespace after the end of the token.
-             */
-
-        /* Skip label, if any */
-        if ( *(tokEnd) == ':' )
-        {
-            /* Line has a label!  Get new token! */
-            tokBegin = tokEnd + 1;
-            getToken (&tokBegin, &tokEnd);
-        }
-
-        /* If empty line or line containing only a label, get next line */
-        if ( *tokBegin == '\0' )
+        getInstruction(inst, &instrName, &restOfInstruction);
+        if ( instrName == NULL )
             continue;
 
-        /* We have a valid token; turn it into a string and set
-         * tokBegin to point to the character after the end.
-         */
-        *tokEnd = '\0';
-        instrName = tokBegin;
-        tokBegin = tokEnd + 1;
+        printDebug ("First non-label token is: %s\n", instrName);
 
-        printDebug ("first non-label token is: %s\n", instrName);
+        /* Determine the format and the opCode or functCode. */
+        getOpType(instrName, &format, &code, lineNum);
+        printDebug("%s instruction is %c format, with %d op/funct code.\n",
+                    instrName, format, code);
 
-        /* CALL STUB CODE TO PROCESS INSTRUCTION !!! */
-        processInstruction(instrName, tokBegin, lineNum, PC);
+        /* This call to stub should be replaced with actual useful code
+         * that processes the instruction and prints the machine code
+         * translation. */
+        stub(restOfInstruction, lineNum);
 
+        printf("\n");
     }
 
     return;
 }
 
+/* Get instruction.
+ * This function skips any leading whitespace or label, and strips
+ * comments.  It then separates the instruction name (assuming there is
+ * one) from the rest of the line, "returning" pointers to those two
+ * strings in the two "pass-by-reference" parameters (which should actually
+ * be addresses of the values to be returned).
+ *    @param input        the line read in
+ *    @param instrName    address where pointer to instruction name
+ *                          should be placed; NULL if the line was
+ *                          empty, contained only a comment, or
+ *                          contained only a label
+ *    @param restOfLine   address where pointer to rest of line should
+ *                          be placed
+ */
+void getInstruction(char * input, char ** instrName, char **restOfLine)
+{
+    char * tokBegin, * tokEnd;     /* used to step thru input */
+
+    /* If the line starts with a comment, move on to next line.  */
+    if ( *input == '#' )
+    {
+        *instrName = NULL;
+        return;
+    }
+
+    /* If there's a comment later in the line, strip it off
+     *  (replace the '#' with a null byte).
+     */
+    (void) strtok (input, "#");
+
+    /* Read the first token, skipping any leading whitespace. */
+    tokBegin = input;
+    getToken (&tokBegin, &tokEnd);
+        /* tokBegin now points to 1st non-whitespace character
+         * in the token and tokEnd points to 1st punctuation mark
+         * or whitespace after the end of the token.
+         */
+
+    /* Skip label, if any */
+    if ( *(tokEnd) == ':' )
+    {
+        /* Line has a label!  Get new token! */
+        tokBegin = tokEnd + 1;
+        getToken (&tokBegin, &tokEnd);
+    }
+
+    /* If empty line or line containing only a label, get next line */
+    if ( *tokBegin == '\0' )
+    {
+        *instrName = NULL;
+        return;
+    }
+
+    /* We have a valid token; turn it into a string and set
+     * tokBegin to point to the character after the end.
+     */
+    *tokEnd = '\0';
+    *instrName = tokBegin;
+    *restOfLine = tokEnd + 1;
+}
+
+/* STUB CODE !!! (The real code could be here or in a separate file.) */
+void getOpType(char * instrName, char * format, int * code, int line)
+{
+    /* This stub assumes that every instruction is an R-format add
+     * instruction.
+     */
+    *format = 'R';
+    *code = 32;
+}
+
+/* STUB CODE !!! (The real code could be here or in a separate file.) */
+void printBin(int value, int length)
+{
+    /* This stub prints the value in decimal format rather than binary,
+     * which makes reading test data easier during development.
+     */
+    printf("%d ", value);
+}
+
 /* STUB CODE !!!
-* For now, assume we don't care what type of instruction it
-* is, instead just assume all instructions have 3 arguments.
-*/
-void processInstruction(char * instName, char * restOfInstruction,
-                        int lineNum, int PC)
+ * Below is an example of how you would call getNTokens on "the rest of the
+ * instruction" (everything after the instruction name).  For example, if
+ * you had the instruction "add $t0, $t1, $t2" then restOfInstruction would
+ * be "$t0, $t1, $t2" and getNTokens would fill the arguments array with
+ * the strings "$t0", "$t1", and "$t2".  If you had the instruction
+ * "lw $t0, 0($s1)", then getNTokens would fill the arguments array with
+ * the strings "$t0", "0", and "$s1".
+ *
+ * When getNTokens encounters an error, it puts a pointer to the error
+ * message in arguments[0].
+ */
+void stub(char * restOfInstruction, int lineNum)
 {
     char * arguments[3];           /* registers or values after name */
 
-    /* Get the 3 arguments.  (Bad assumption, but this is just a stub.) */
+    /* Get 3 arguments.  (For some instructions it should be 1 or 2.) */
     if ( ! getNTokens(restOfInstruction, 3, arguments) )
     {
-        /* When getNTokens encounters an error, it puts a pointer
-         * to the error message in arguments[0].
-         */
         printError("Error on line %d: %s\n", lineNum, arguments[0]);
         return;
     }
 
     /* Print the instruction name and the 3 arguments. */
-    printDebug("Line %d: %s %s, %s, %s\n", lineNum, instName,
+    printDebug("Rest of instruction consists of 3 arguments: ");
+    printDebug("\"%s\", \"%s\", and \"%s\"\n", 
                         arguments[0], arguments[1], arguments[2]);
-
-    return;
 }
