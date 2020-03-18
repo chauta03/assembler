@@ -62,7 +62,7 @@ void pass2 (FILE * fp, LabelTable table)
         /* This call to stub should be replaced with actual useful code
          * that processes the instruction and prints the machine code
          * translation. */
-        stub(restOfInstruction, lineNum);
+        stub(lineNum, restOfInstruction, numOperands);
 
         printf("\n");
     }
@@ -184,18 +184,18 @@ void printBin(int value, int length)
  * When getNTokens encounters an error, it puts a pointer to the error
  * message in arguments[0].
  */
-void stub(char * restOfInstruction, int lineNum)
+void stub(int lineNum, char * restOfInstruction, int numOperands)
 {
-    char * arguments[3];           /* registers or values after name */
+    char * arguments[3];      /* registers or values after name; max of 3 */
 
-    /* Get 3 arguments.  (For some instructions it should be 1 or 2.) */
-    if ( ! getNTokens(restOfInstruction, 3, arguments) )
+    /* Get arguments.  (Depending on instruction, should be 1, 2, or 3.) */
+    if ( ! getNTokens(restOfInstruction, numOperands, arguments) )
     {
         printError("Error on line %d: %s\n", lineNum, arguments[0]);
         return;
     }
 
-    /* Print the instruction name and the 3 arguments. */
+    /* Print the instruction name and the arguments (assume 3 in this stub). */
     printDebug("Rest of instruction consists of 3 arguments: ");
     printDebug("\"%s\", \"%s\", and \"%s\"\n", 
                         arguments[0], arguments[1], arguments[2]);
