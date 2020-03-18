@@ -37,6 +37,7 @@ void pass2 (FILE * fp, LabelTable table)
 
     char format;               /* Is instruction 'R', 'I', or 'J'? */
     int code;                  /* opcode or funct code, depending on format */
+    int numOperands;           /* number of operands for a given instruction */
 
     /* Continuously read next line of input until EOF is encountered.
      */
@@ -54,7 +55,7 @@ void pass2 (FILE * fp, LabelTable table)
         printDebug ("First non-label token is: %s\n", instrName);
 
         /* Determine the format and the opCode or functCode. */
-        getOpType(instrName, &format, &code, lineNum);
+        getOpInfo(lineNum, instrName, &format, &code, &numOperands);
         printDebug("%s instruction is %c format, with %d op/funct code.\n",
                     instrName, format, code);
 
@@ -130,17 +131,39 @@ void getInstruction(char * input, char ** instrName, char **restOfLine)
     *restOfLine = tokEnd + 1;
 }
 
-/* STUB CODE !!! (The real code could be here or in a separate file.) */
-void getOpType(char * instrName, char * format, int * code, int line)
+/* STUB CODE !!!
+ * The real code and its documentation could be here or in a separate file.
+ * Get format, op/funct code, and number of operands associated with a
+ * given instruction.
+ *    @param line           line number, for reporting errors
+ *    @param instrName      name of instruction (input)
+ *    @param format         address to fill with format ('R', 'I', or 'J')
+ *    @param code           address to fill with opcode or funct code 
+ *    @param numOperands    address to fill with number of operands
+ *                              associated with this instruction
+ *                              (e.g., jr $ra has one operand,
+ *                                     add $$t0, $t1, $t2 has three)
+ */
+void getOpInfo(int line, char * instrName,
+               char * format, int * code, int * numOperands)
 {
     /* This stub assumes that every instruction is an R-format add
-     * instruction.
+     * instruction, which has 3 operands.
      */
     *format = 'R';
     *code = 32;
+    *numOperands = 3;
 }
 
-/* STUB CODE !!! (The real code could be here or in a separate file.) */
+/* STUB CODE !!!
+ * The real code and its documentation could be here or in a separate file.
+ *   (You can decide whether or not to require that value be non-negative.)
+ * Print value in pseudo-binary (made up of character '0's and '1's).
+ *      @param value   value to print in pseudo-binary
+ *      @param length  length of binary code needed, in bits
+ *      @pre           `value` can be represented in `length` number of bits
+ *      @pre           value >= 0
+ */
 void printBin(int value, int length)
 {
     /* This stub prints the value in decimal format rather than binary,
