@@ -3,10 +3,6 @@
  *      @param  fp  pointer to an open file (stdin or other file pointer)
  *                  from which to read lines of assembly source code
  *      @param  table  an existing Label Table
- *      @return a newly-created table containing labels found in the
- *              input file, each with the address of the instruction
- *              containing it (assuming the first line of input
- *              corresponds to address 0)
  *
  * DESCRIPTION MISSING !
  *
