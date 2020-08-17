@@ -4,14 +4,16 @@ GCC=gcc -Wall -Wextra -Wpedantic -Wformat -Wshadow -Wredundant-decls \
     -Wstrict-prototypes
 # Can also use -Wtraditional or -Wmissing-prototypes
 
-all:	assembler
+all:	testLabelTable
 
 #  Switch to alternative versions of the all target as you're ready for them.
+# all:	assembler
 # all:	testLabelTable testGetNTokens
 # all:	testLabelTable testGetNTokens testPass1
 # all:	testLabelTable testGetNTokens testPass1 assembler
 
 testLabelTable: assembler.h \
+    	process_arguments.h \
 	LabelTable.c \
     	process_arguments.c \
 	printDebug.c \
@@ -23,6 +25,7 @@ testLabelTable: assembler.h \
 	    	-o testLabelTable
 
 testGetNTokens: 	assembler.h \
+    	process_arguments.h \
 	getToken.c \
 	getNTokens.c \
 	printDebug.c \
@@ -33,6 +36,7 @@ testGetNTokens: 	assembler.h \
 	    printDebug.c printError.c same.c -o testGetNTokens
 
 testPass1: 	assembler.h \
+    	process_arguments.h \
     	LabelTable.c \
     	process_arguments.c \
 	getToken.c \
@@ -47,22 +51,36 @@ testPass1: 	assembler.h \
 	    printDebug.c printError.c same.c testPass1.c -o testPass1
 
 assembler: 	assembler.h \
+    	process_arguments.h \
     	LabelTable.c \
     	process_arguments.c \
+	getInstName.c \
 	getToken.c \
 	getNTokens.c \
 	pass1.c \
 	pass2.c \
+	printAsBinary.c \
 	printDebug.c \
 	printError.c \
 	same.c \
 	assembler.c
 	$(GCC) -g LabelTable.c process_arguments.c \
-	    getNTokens.c getToken.c pass1.c pass2.c \
-	    printDebug.c printError.c same.c assembler.c -o assembler
+	    getInstName.c getNTokens.c getToken.c pass1.c pass2.c \
+	    printAsBinary.c printDebug.c printError.c \
+	    same.c assembler.c -o assembler
+
+stripCR:	assembler.h \
+    	process_arguments.h \
+	printDebug.c \
+	printError.c \
+    	process_arguments.c \
+	same.c \
+    	stripCR.c
+	$(GCC) -g printDebug.c printError.c process_arguments.c same.c \
+	    stripCR.c -o stripCR
 
 assembler.h: LabelTable.h getToken.h printFuncs.h process_arguments.h same.h
 	touch assembler.h
 
 clean: 
-	rm -rf testLabelTable testGetNTokens testPass1 assembler
+	rm -rf testLabelTable testGetNTokens testPass1 assembler stripCR
