@@ -18,7 +18,8 @@
  *      working side-by-side with:
  * 
  * Modification Log:
- *    - AB, 3/25/2020 - implement printInt, provide skeletons for others
+ *    - AB, 3/25/2020 - implement printIntInString, stub printInt,
+ *                      provide skeletons for others
  *    - ???
  */
 
@@ -39,7 +40,7 @@ void printInt(int value, int length)
     /* This is NOT the correct final behavior of this function, but may
      * be useful during development because the output is easier to read
      * than binary (or pseudo-binary) output would be.
-     * When this function has been completed, the printf statement
+     * When all testing has been completed, the printf statement
      * should be removed, commented out, or turned into a printDebug.
      */
     printf(" (%d)", value);
@@ -48,11 +49,12 @@ void printInt(int value, int length)
 
 /* Print register in pseudo-binary (made up of character '0's and '1's).
  *      @param regName   name of register to print in pseudo-binary
+ *      @param lineNum   line number (for error messages)
  * If the register name passed as a parameter is an invalid register name,
  * this function prints "<invalid reg>" instead of the register number,
  * allowing the rest of the instruction to be parsed and printed.
  */
-void printReg(char * regName)
+void printReg(char * regName, int lineNum)
 {
     /* If the string contains a valid register name, print the register number.
      * Otherwise print "<invalid reg>".
@@ -99,7 +101,8 @@ void printIntInString(char * intInString, int numBits, int lineNum)
  *      @param table         label table
  *      @param lineNum       line number (for error messages)
  */
-void printJumpTarget(char * targetLabel, LabelTable * table, int lineNum)
+void printJumpTarget(char * targetLabel, LabelTableArrayList * table,
+                     int lineNum)
 {
     /* This function should get the address associated with the
      * target label, calculate the address to store in the instruction,
@@ -117,7 +120,7 @@ void printJumpTarget(char * targetLabel, LabelTable * table, int lineNum)
  *      @param PC            Program Counter (could use lineNum instead)
  *      @param lineNum       line number (for error messages)
  */
-void printBranchOffset(char * targetLabel, LabelTable * table,
+void printBranchOffset(char * targetLabel, LabelTableArrayList * table,
                        int PC, int lineNum)
 {
     /*  STUB CODE THAT PRETENDS THE OFFSET IS ALWAYS 20 !!!

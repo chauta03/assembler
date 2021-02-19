@@ -1,3 +1,13 @@
+/**
+ * This program converts a file with the "wrong" kind of newline to a
+ * file with the "right" kind of newline for the machine you are running
+ * on.  If the lines end in \r\n and your machine expects \n, this program
+ * will write lines ending in \n to stdout.  I believe it will also do the
+ * reverse, although I haven't tested it on a Windows machine.
+ *
+ * The input can come from stdin or from a file specified on the command
+ * line.
+ */
 
 /* include files go here */
 #include "assembler.h"

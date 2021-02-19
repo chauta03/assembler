@@ -9,23 +9,21 @@ GCC=gcc -Wall -Wextra -Wpedantic -Wformat -Wshadow -Wredundant-decls \
     -Wstrict-prototypes
 # Can also use -Wtraditional or -Wmissing-prototypes
 
-all:	assembler
-
 #  Switch to alternative versions of the all target as you're ready for them.
-# all:	testLabelTable testGetNTokens
-# all:	testLabelTable testGetNTokens testPass1
-# all:	testLabelTable testGetNTokens testPass1 assembler
+# all:	assembler
+# all:	testLabelTable assembler
+all:	testLabelTable testGetNTokens testPass1 testPrintAsBinary assembler
 
 testLabelTable: assembler.h \
-	LabelTable.o \
+	LabelTableArrayList.o \
     	process_arguments.o \
 	printDebug.o \
 	printError.o \
 	same.o \
     	testLabelTable.o
 	$(GCC) -g process_arguments.o same.o \
-		LabelTable.o printDebug.o printError.o testLabelTable.o \
-	    	-o testLabelTable
+		LabelTableArrayList.o printDebug.o printError.o \
+	    	testLabelTable.o -o testLabelTable
 
 testGetNTokens: 	assembler.h \
 	getToken.o \
@@ -38,7 +36,7 @@ testGetNTokens: 	assembler.h \
 	    printDebug.o printError.o same.o -o testGetNTokens
 
 testPass1: 	assembler.h \
-    	LabelTable.o \
+    	LabelTableArrayList.o \
     	process_arguments.o \
 	getToken.o \
 	getNTokens.o \
@@ -47,33 +45,58 @@ testPass1: 	assembler.h \
 	printError.o \
 	same.o \
 	testPass1.o
-	$(GCC) -g LabelTable.o process_arguments.o \
+	$(GCC) -g LabelTableArrayList.o process_arguments.o \
 	    getNTokens.o getToken.o pass1.o \
 	    printDebug.o printError.o same.o testPass1.o -o testPass1
 
 assembler: 	assembler.h \
-    	LabelTable.o \
+    	process_arguments.h \
+    	LabelTableArrayList.o \
     	process_arguments.o \
+	getInstName.o \
 	getToken.o \
 	getNTokens.o \
 	pass1.o \
 	pass2.o \
+	printAsBinary.o \
 	printDebug.o \
 	printError.o \
 	same.o \
 	assembler.o
-	$(GCC) -g LabelTable.o process_arguments.o \
-	    getNTokens.o getToken.o pass1.o pass2.o \
-	    printDebug.o printError.o same.o assembler.o -o assembler
+	$(GCC) -g LabelTableArrayList.o process_arguments.o \
+	    getInstName.o getNTokens.o getToken.o pass1.o pass2.o \
+	    printAsBinary.o printDebug.o printError.o \
+	    same.o assembler.o -o assembler
 
-assembler.h: same.h LabelTable.h getToken.h printFuncs.h process_arguments.h
+testPrintAsBinary: 	assembler.h \
+	printAsBinary.o \
+	LabelTableArrayList.o \
+	printDebug.o \
+	printError.o \
+	same.o \
+	testPrintAsBinary.o
+	$(GCC) -g LabelTableArrayList.o printDebug.o printError.o same.o \
+	    printAsBinary.o testPrintAsBinary.o -o testPrintAsBinary
+
+stripCR:	assembler.h \
+    	process_arguments.h \
+	printDebug.o \
+	printError.o \
+    	process_arguments.o \
+	same.o \
+    	stripCR.o
+	$(GCC) -g printDebug.o printError.o process_arguments.o same.o \
+	    stripCR.o -o stripCR
+
+assembler.h: LabelTableArrayList.h getToken.h \
+    		same.h printFuncs.h process_arguments.h
 	touch assembler.h
 
 same.o: same.h same.c
 	$(GCC) -c -g same.c 
 
-LabelTable.o: LabelTable.h LabelTable.c
-	$(GCC) -c -g LabelTable.c 
+LabelTableArrayList.o: LabelTableArrayList.h LabelTableArrayList.c
+	$(GCC) -c -g LabelTableArrayList.c 
 
 process_arguments.o: process_arguments.h process_arguments.c
 	$(GCC) -c -g process_arguments.c
@@ -84,7 +107,7 @@ printDebug.o: printFuncs.h printDebug.c
 printError.o: printFuncs.h printError.c
 	$(GCC) -c -g printError.c
 
-testLabelTable.o: assembler.h LabelTable.h testLabelTable.c
+testLabelTable.o: assembler.h LabelTableArrayList.h testLabelTable.c
 	$(GCC) -c -g testLabelTable.c
 
 getToken.o: getToken.h getToken.c
@@ -99,6 +122,9 @@ testGetNTokens.o: assembler.h testGetNTokens.c
 pass1.o: assembler.h pass1.c
 	$(GCC) -c -g pass1.c
 
+testPrintAsBinary.o: assembler.h testPrintAsBinary.c
+	$(GCC) -c -g testPrintAsBinary.c
+
 testPass1.o: assembler.h testPass1.c
 	$(GCC) -c -g testPass1.c
 
@@ -109,4 +135,5 @@ assembler.o: assembler.h assembler.c
 	$(GCC) -c -g assembler.c
 
 clean: 
-	rm -rf *.o testLabelTable testGetNTokens testPass1 assembler
+	rm -rf *.o testLabelTable assembler testGetNTokens testPass1 \
+	    testPrintAsBinary stripCR

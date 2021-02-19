@@ -8,21 +8,20 @@ all:	testLabelTable
 
 #  Switch to alternative versions of the all target as you're ready for them.
 # all:	assembler
-# all:	testLabelTable testGetNTokens
-# all:	testLabelTable testGetNTokens testPass1
-# all:	testLabelTable testGetNTokens testPass1 assembler
+# all:	testLabelTable assembler
+# all:	testLabelTable testGetNTokens testPass1 testPrintAsBinary assembler
 
 testLabelTable: assembler.h \
     	process_arguments.h \
-	LabelTable.c \
+	LabelTableArrayList.c \
     	process_arguments.c \
 	printDebug.c \
 	printError.c \
 	same.c \
     	testLabelTable.c
 	$(GCC) -g process_arguments.c same.c \
-		LabelTable.c printDebug.c printError.c testLabelTable.c \
-	    	-o testLabelTable
+		LabelTableArrayList.c printDebug.c printError.c \
+	    	testLabelTable.c -o testLabelTable
 
 testGetNTokens: 	assembler.h \
     	process_arguments.h \
@@ -37,7 +36,7 @@ testGetNTokens: 	assembler.h \
 
 testPass1: 	assembler.h \
     	process_arguments.h \
-    	LabelTable.c \
+    	LabelTableArrayList.c \
     	process_arguments.c \
 	getToken.c \
 	getNTokens.c \
@@ -46,13 +45,18 @@ testPass1: 	assembler.h \
 	printError.c \
 	same.c \
 	testPass1.c
-	$(GCC) -g LabelTable.c process_arguments.c \
+	$(GCC) -g LabelTableArrayList.c process_arguments.c \
 	    getNTokens.c getToken.c pass1.c \
 	    printDebug.c printError.c same.c testPass1.c -o testPass1
 
+testPrintAsBinary: 	assembler.h \
+	printAsBinary.c \
+	testPrintAsBinary.c
+	$(GCC) -g printAsBinary.c testPrintAsBinary.c -o testPrintAsBinary
+
 assembler: 	assembler.h \
     	process_arguments.h \
-    	LabelTable.c \
+    	LabelTableArrayList.c \
     	process_arguments.c \
 	getInstName.c \
 	getToken.c \
@@ -64,7 +68,7 @@ assembler: 	assembler.h \
 	printError.c \
 	same.c \
 	assembler.c
-	$(GCC) -g LabelTable.c process_arguments.c \
+	$(GCC) -g LabelTableArrayList.c process_arguments.c \
 	    getInstName.c getNTokens.c getToken.c pass1.c pass2.c \
 	    printAsBinary.c printDebug.c printError.c \
 	    same.c assembler.c -o assembler
@@ -79,7 +83,8 @@ stripCR:	assembler.h \
 	$(GCC) -g printDebug.c printError.c process_arguments.c same.c \
 	    stripCR.c -o stripCR
 
-assembler.h: LabelTable.h getToken.h printFuncs.h process_arguments.h same.h
+assembler.h: LabelTableArrayList.h getToken.h \
+	printFuncs.h process_arguments.h same.h
 	touch assembler.h
 
 clean: 

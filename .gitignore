@@ -7,6 +7,7 @@ assembler
 
 # Compiled source #
 ###################
+a.out
 *.com
 *.class
 *.ctxt

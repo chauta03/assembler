@@ -1,8 +1,8 @@
 /**
- * void pass2 (FILE * fp, LabelTable table)
+ * void pass2 (FILE * fp, LabelTableArrayList * table)
  *      @param  fp  pointer to an open file (stdin or other file pointer)
  *                  from which to read lines of assembly source code
- *      @param  table  an existing Label Table
+ *      @param  table  a pointer to an existing Label Table
  *
  * DESCRIPTION MISSING !
  *
@@ -16,8 +16,7 @@
 
 #include "assembler.h"
 
-void pass2 (FILE * fp, LabelTable table)
-  /* returns a copy of the label table that was constructed */
+void pass2 (FILE * fp, LabelTableArrayList * table)
 {
     int    lineNum;            /* line number */
     int    PC = 0;             /* program counter */
@@ -65,7 +64,7 @@ void pass2 (FILE * fp, LabelTable table)
         }
         else
         {
-            processIorJ(lineNum, &table, opcode, restOfInstruction, PC);
+            processIorJ(lineNum, table, opcode, restOfInstruction, PC);
         }
     }
 
@@ -190,7 +189,7 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
  * When getNTokens encounters an error, it puts a pointer to the error
  * message in arguments[0].
  */
-void processIorJ(int lineNum, LabelTable * table,
+void processIorJ(int lineNum, LabelTableArrayList * table,
                  int opcode, char * restOfInstruction, int PC)
 {
     char * arguments[3];      /* registers or values after name; max of 3 */
@@ -210,8 +209,8 @@ void processIorJ(int lineNum, LabelTable * table,
      *      printInt(0, 5);
      *  OR  printReg(arguments[0]);
      *  OR  printIntInString(atoi(arguments[2]), 16);
-     *  OR  printJumpTarget(arguments[0], &table, lineNum);
-     *  OR  printBranchOffset(arguments[2], &table, PC, lineNum);
+     *  OR  printJumpTarget(arguments[0], table, lineNum);
+     *  OR  printBranchOffset(arguments[2], table, PC, lineNum);
      */
     printDebug("opcode %d is not implemented yet.\n", opcode);
 }
