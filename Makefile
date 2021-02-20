@@ -88,4 +88,5 @@ assembler.h: LabelTableArrayList.h getToken.h \
 	touch assembler.h
 
 clean: 
-	rm -rf testLabelTable testGetNTokens testPass1 assembler stripCR
+	rm -f *.o testLabelTable testPass1 testGetNTokens testPrintAsBinary \
+	    assembler stripCR

@@ -3,11 +3,12 @@
 testLabelTable
 testgetNTokens
 testPass1
+testPrintAsBinary
 assembler
+stripCR
 
 # Compiled source #
 ###################
-a.out
 *.com
 *.class
 *.ctxt

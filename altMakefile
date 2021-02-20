@@ -135,5 +135,5 @@ assembler.o: assembler.h assembler.c
 	$(GCC) -c -g assembler.c
 
 clean: 
-	rm -rf *.o testLabelTable assembler testGetNTokens testPass1 \
+	rm -f *.o testLabelTable assembler testGetNTokens testPass1 \
 	    testPrintAsBinary stripCR
