@@ -4,10 +4,8 @@ GCC=gcc -Wall -Wextra -Wpedantic -Wformat -Wshadow -Wredundant-decls \
     -Wstrict-prototypes
 # Can also use -Wtraditional or -Wmissing-prototypes
 
-all:	testLabelTable
-
 #  Switch to alternative versions of the all target as you're ready for them.
-# all:	assembler
+all:	assembler
 # all:	testLabelTable assembler
 # all:	testLabelTable testGetNTokens testPass1 testPrintAsBinary assembler
 
@@ -49,11 +47,6 @@ testPass1: 	assembler.h \
 	    getNTokens.c getToken.c pass1.c \
 	    printDebug.c printError.c same.c testPass1.c -o testPass1
 
-testPrintAsBinary: 	assembler.h \
-	printAsBinary.c \
-	testPrintAsBinary.c
-	$(GCC) -g printAsBinary.c testPrintAsBinary.c -o testPrintAsBinary
-
 assembler: 	assembler.h \
     	process_arguments.h \
     	LabelTableArrayList.c \
@@ -73,6 +66,16 @@ assembler: 	assembler.h \
 	    printAsBinary.c printDebug.c printError.c \
 	    same.c assembler.c -o assembler
 
+testPrintAsBinary: 	assembler.h \
+	printAsBinary.c \
+	LabelTableArrayList.c \
+	printDebug.c \
+	printError.c \
+	same.c \
+	testPrintAsBinary.c
+	$(GCC) -g LabelTableArrayList.c printDebug.c printError.c same.c \
+	    printAsBinary.c testPrintAsBinary.c -o testPrintAsBinary
+
 stripCR:	assembler.h \
     	process_arguments.h \
 	printDebug.c \
@@ -88,5 +91,5 @@ assembler.h: LabelTableArrayList.h getToken.h \
 	touch assembler.h
 
 clean: 
-	rm -f *.o testLabelTable testPass1 testGetNTokens testPrintAsBinary \
-	    assembler stripCR
+	rm -rf testLabelTable assembler testGetNTokens testPass1 \
+	    testPrintAsBinary stripCR
