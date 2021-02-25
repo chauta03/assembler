@@ -99,10 +99,11 @@ and `printAsBinary.c` include:
    instruction is not a valid I- or J-format instruction.
  - `getFunctCode`: Designed to return R-format funct codes, or -1 if the
    instruction is not a valid R-format instruction.
- - `printInt`: Designed to print the binary version of a value (stub prints
+ - `printInt`: Designed to print the binary version of a value. (Stub prints
    the decimal equivalent, which is useful while developing and debugging
    the program, so you may want to keep that stub behavior until everything
-   else is finished).
+   else is finished.  If you keep `printInt` in stub form, you can compare
+   output against `smallSampleTestfile.mips.decimal` as you develop and test.)
  - `printReg`: Designed to find the register number for the given register and
    print its binary value (or decimal value during debugging) using `printInt`.
  - `printIntInString`: Prints the value of the integer in a string
