@@ -150,8 +150,10 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
         /* CODE MISSING ! */
 
     }
-    /*  else if ( functCode == ??? )     /* Handle other unusual formats * /
+    /*  else if ( functCode == ??? )     // Handle sll and srl
      *  {
+     *      // Shift amount is a number in a string, not an int
+     *      // e.g., printIntInString(arguments[2], 5, lineNum);
      *  }
      */
     else                        /* Handle common format for add, etc. */
@@ -159,20 +161,14 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
         printDebug("funct %d \"%s\", \"%s\", and \"%s\"\n", functCode,
                             arguments[0], arguments[1], arguments[2]);
 
-        /* Temporary copy of debug message as place-filler */
-        printf("funct %d \"%s\", \"%s\", and \"%s\"\n", functCode,
-                            arguments[0], arguments[1], arguments[2]);
-
-        /* CODE MISSING ! */
-
-        /* If this stub were really processing an instruction, it might do
-         * various things with the arguments using functions from
-         * printAsBinary.c, such as: 
-         *      printInt(0, 6);    OR   printInt(functCode, 6);
-         *  OR  printReg(arguments[0]);
-         *  OR  printIntInString(atoi(arguments[2]), 16);
+        /* Print binary for the opcode, registers, shift amount,
+         * and funct code.
          */
-
+        /* INCOMPLETE CODE ! */
+        printInt(0, 6);
+        printReg(arguments[0], lineNum);
+        printInt(functCode, 6);
+        printf("\n");
     }
 
 }
@@ -195,6 +191,9 @@ void processIorJ(int lineNum, LabelTableArrayList * table,
     char * arguments[3];      /* registers or values after name; max of 3 */
     int numOperands;
 
+    /* Print the opcode (this part is the same for all I/J formats */
+    printInt(opcode, 6);
+
     /* As with processR, the opcode will tell you how many arguments (or
      * parameters) to get from getNTokens.
      * Then, handle the various unusual formats, followed by
@@ -203,15 +202,6 @@ void processIorJ(int lineNum, LabelTableArrayList * table,
 
     /* CODE MISSING ! */
 
-    /* If this stub were really processing an instruction, it might do
-     * various things with the arguments using functions from
-     * printAsBinary.c, such as: 
-     *      printInt(0, 5);
-     *  OR  printReg(arguments[0]);
-     *  OR  printIntInString(atoi(arguments[2]), 16);
-     *  OR  printJumpTarget(arguments[0], table, lineNum);
-     *  OR  printBranchOffset(arguments[2], table, PC, lineNum);
-     */
-    printDebug("opcode %d is not implemented yet.\n", opcode);
+    printf(" is not implemented yet.\n");
 }
 

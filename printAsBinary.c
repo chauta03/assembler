@@ -104,9 +104,10 @@ void printIntInString(char * intInString, int numBits, int lineNum)
 void printJumpTarget(char * targetLabel, LabelTableArrayList * table,
                      int lineNum)
 {
-    /* This function should get the address associated with the
-     * target label, calculate the address to store in the instruction,
-     * and then print that value with the appropriate number of bits.
+    /* This function should call findLabel to get the address associated
+     * with the target label in the label table, calculate the portion of
+     * the address to store in the instruction, and then print that value
+     * with the appropriate number of bits.
      */
 
     /*  CODE MISSING !!! */
@@ -123,9 +124,13 @@ void printJumpTarget(char * targetLabel, LabelTableArrayList * table,
 void printBranchOffset(char * targetLabel, LabelTableArrayList * table,
                        int PC, int lineNum)
 {
-    /*  STUB CODE THAT PRETENDS THE OFFSET IS ALWAYS 20 !!!
-     *  REAL CODE MISSING !!!
+    /* This function should call findLabel to get the address associated
+     * with the target label in the label table, calculate the distance
+     * from the PC to that address and the portion of that to store in the
+     * instruction, and then print that value with the appropriate number
+     * of bits.
      */
 
-    printInt(20, 16);
+    /*  CODE MISSING !!! */
+
 }
