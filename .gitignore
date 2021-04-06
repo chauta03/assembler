@@ -19,6 +19,8 @@ stripCR
 *.pyc
 *.pyo
 *.so
+a.out
+**/*.dSYM
 
 # IDE-specific project/package information #
 ############################################
