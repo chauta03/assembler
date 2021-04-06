@@ -1,7 +1,7 @@
 # Executables created by Makefile #
 ###################################
 testLabelTable
-testgetNTokens
+testGetNTokens
 testPass1
 testPrintAsBinary
 assembler
