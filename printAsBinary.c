@@ -32,7 +32,7 @@
  */
 void printInt(int value, int length)
 {
-    /* Print the value passed as a parameter in decimal format.
+    /* Print the value passed as a parameter in "character binary" format.
      */
 
     /* STUB CODE !!!  REAL CODE MISSING !!! */
@@ -57,7 +57,8 @@ void printInt(int value, int length)
 void printReg(char * regName, int lineNum)
 {
     /* If the string contains a valid register name, print the register number.
-     * Otherwise print "<invalid reg>".
+     * Otherwise print "<invalid reg>" to stdout and an error message to
+     * stderr.
      */
 
     /* CODE MISSING !!! */
