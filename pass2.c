@@ -83,8 +83,8 @@ void pass2 (FILE * fp, LabelTableArrayList * table)
 int getOpCode(char * instrName)
 {
     /* This stub assumes that instrName is not a valid I or J format
-     * instruction.
-     *   (NOT NECESSARILY A GOOD ASSUMPTION -- CODE MISSING!)
+     * instruction, so it returns 0.
+     *   (VERY BAD ASSUMPTION -- CODE MISSING!)
      */
     return 0;
 }
