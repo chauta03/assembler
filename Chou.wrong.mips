@@ -1,0 +1,11 @@
+L1: addu $a13, $a2, $a3     # wrong register $a13
+    suba $t0, $t1, $t2      # wrong instruction name suba
+    addi $a1, $a2, 65537    # out of bound (more than 16 bits)
+L2: lui $t0, 1028
+    beq $at, $zero, L3      # invalid L3
+    bne $t5, $t1, L4        # invalid L4
+    slt $t2, $t3, $t4
+    sltu $t6, $t7, $t8
+    slt $t-1, $t3, $t1      # invalid $t-1
+    add 1, $t3, $t1         # invalid 1
+L5: j 268435600             # invalid target label

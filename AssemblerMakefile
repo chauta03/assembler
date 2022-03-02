@@ -5,9 +5,9 @@ GCC=gcc -Wall -Wextra -Wpedantic -Wformat -Wshadow -Wredundant-decls \
 # Can also use -Wtraditional or -Wmissing-prototypes
 
 #  Switch to alternative versions of the all target as you're ready for them.
-all:	assembler
+# all:	assembler
 # all:	testLabelTable assembler
-# all:	testLabelTable testGetNTokens testPass1 testPrintAsBinary assembler
+all:	testLabelTable testGetNTokens testPass1 testPrintAsBinary assembler
 
 testLabelTable: assembler.h \
     	process_arguments.h \

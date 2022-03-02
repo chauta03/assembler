@@ -1,0 +1,14 @@
+Line 1: trying to print <$a13> as invalid register000000001100011100000100001
+Invalid instruction suba on line 2.
+Trying to print <65537> as out of bound number00100000110001010000000000000001
+00111100000010000000010000000100
+Line 5: trying to branch to L3 as an invalid target label.
+0001000000100000
+Line 6: trying to branch to L4 as an invalid target label.
+0001010110101001
+00000001011011000101000000101010
+00000001111110000111000000101011
+Line 9: trying to print <$t-1> as invalid register000000010110100100000101010
+Line 10: trying to print <1> as invalid register000000010110100100000100000
+Line 11: trying to jump to 268435600 as an invalid target label.
+000010

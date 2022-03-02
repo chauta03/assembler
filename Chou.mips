@@ -1,0 +1,28 @@
+    add $v0, $v1, $a0
+    addi $v0, $t2, -7
+    addi $v0, $t2, 0
+L1: addu $a1, $a2, $a3
+    sub $t0, $t1, $t2
+    subu $t3, $t4, $t5
+    addi $t6, $t7, 64
+    addiu $s0, $s1, 800
+L2: and $s2, $s3, $s4
+    or $s5, $s6, $s7
+    nor $t8, $t9, $k0
+    andi $k1, $a1, 18
+    ori $t1, $t2, 100
+    sll $s1, $s7, 16
+    srl $k1, $s6, 16
+    lw $s2, 1200($gp)
+    sw $t1, 8($sp)
+    sw $t7, 12($fp)
+    lui $t0, 1028
+    beq $at, $zero, L3
+    bne $t5, $t1, L4
+    slt $t2, $t3, $t4
+    sltu $t6, $t7, $t8
+L3: slti $s2, $t0, 100
+    sltiu $s4, $s6, 100
+L4: jr $ra
+    j L1
+    jal L1

@@ -11,6 +11,7 @@
 #include <stdlib.h>     /* May need to be _stdlib.h on some machines. */
 #include <string.h>	/* Might be memory.h on some machines. */
 #include <ctype.h>
+#include <math.h>
 
 #include "LabelTableArrayList.h"
 #include "getToken.h"

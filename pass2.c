@@ -4,13 +4,22 @@
  *                  from which to read lines of assembly source code
  *      @param  table  a pointer to an existing Label Table
  *
- * DESCRIPTION MISSING !
+ * This function reads the lines in an assembly source file and print
+ * machine version.  It reads MIPS assembly language and write out the
+ * corresponding machine language instructions. If an error occurs, the
+ * function prints an error message.
  *
- * Author: <author>
- * Date:   <date>
+ * The function in this file:
+ *  - Read MIPS codes and print corresponding machine language
+ *  - Get corresponding opcode for an instruction name (I and J instructions)
+ *  - Get corresponding functcode for an instruction name (R instructions)
+ *  - Print machine language instructions for I and J instructions
+ *  - Print machine language instructions ofr R instructions
+ *
+ * Author: Chau Ta
+ * Date:   28/02/22
  *
  * Modified by:  
- *      Why?
  *
  */
 
@@ -72,7 +81,7 @@ void pass2 (FILE * fp, LabelTableArrayList * table)
 }
 
 
-/* STUB CODE !!!
+/*
  * The real code and its documentation could be here or in a separate file.
  * Get opcode associated with a given instruction.
  *    @param instrName      name of instruction (input)
@@ -84,12 +93,47 @@ int getOpCode(char * instrName)
 {
     /* This stub assumes that instrName is not a valid I or J format
      * instruction, so it returns 0.
-     *   (VERY BAD ASSUMPTION -- CODE MISSING!)
      */
+
+    /* get Opcode for I instructions from 8 to 13 */
+    static char * instrArrayI[] =   
+    {
+            "addi","addiu",
+            "slti","sltiu",
+            "andi","ori"
+    };
+
+    /* Loop through the array. If match an item, return associated opcode */
+    int i;
+    for (i = 0; i < 6; i++)
+    {
+        if ( strcmp(instrName, instrArrayI[i]) == SAME )
+            return i + 8;       /* opcode from 8-13 */ 
+    }
+
+    /* get Opcode for other I instruction cases */
+    if ( strcmp(instrName, "beq") == SAME )
+        return 4;
+    else if ( strcmp(instrName, "bne") == SAME )
+        return 5;
+    else if ( strcmp(instrName, "lw") == SAME )
+        return 35;
+    else if ( strcmp(instrName, "sw") == SAME )
+        return 43;
+    else if ( strcmp(instrName, "lui") == SAME )
+        return 15;
+    /* get Opcode for J instructions */
+    else if ( strcmp(instrName, "j") == SAME )
+        return 2;
+    else if ( strcmp(instrName, "jal") == SAME )
+        return 3;
+
+    /* if not valid I and J instructions, return 0 */
     return 0;
+
 }
 
-/* STUB CODE !!!
+/*
  * The real code and its documentation could be here or in a separate file.
  * Get funct code associated with a given instruction.
  *    @param instrName      name of instruction (input)
@@ -98,11 +142,34 @@ int getOpCode(char * instrName)
  */
 int getFunctCode(char * instrName)
 {
-    /* This stub only recognizes the R-format add instruction.
-     *   (CODE MISSING!)
+    /* 
+     * This stub only recognizes the R-format add instruction.
      */
-    if ( strcmp(instrName, "add") == SAME )
-        return 32;
+
+    if ( strcmp(instrName, "sll") == SAME )
+        return 0;
+    else if ( strcmp(instrName, "srl") == SAME )
+        return 2;
+    else if ( strcmp(instrName, "jr") == SAME )
+        return 8;
+
+    /* Array of some R instructions having funct code from 32 - 43*/
+    static char * instrArrayR[] =
+    {
+        "add", "addu", "sub", "subu",
+        "and", "or", "invalid", "nor",  /* Because R instructions do not include 38 */
+        "invalid", "invalid",        /* Because R instructions do not include 40 and 41 */
+        "slt", "sltu"
+    };
+
+    /* loop through the array: if match an item, return associated funct code */
+    int i;
+    for (i = 0; i < 12; i++)    
+    {
+        if ( strcmp(instrName, instrArrayR[i]) == SAME )
+            return i + 32;
+    }
+    
 
     /* instrName not recognized */
     return -1;
@@ -127,13 +194,9 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
 
     /* JR only has 1 operand; all other R-format instructions have 3. */
     if ( functCode == 8 )
-    {
         numOperands = 1;
-    }
     else
-    {
         numOperands = 3;
-    }
 
     /* Get arguments.  (Depending on instruction, should be 1, 2, or 3.) */
     if ( ! getNTokens(restOfInstruction, numOperands, arguments) )
@@ -147,7 +210,13 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
     {
         printDebug("jr \"%s\"\n", arguments[0]);
 
-        /* CODE MISSING ! */
+        printInt(0, 6);     /* opcode */
+        printReg(arguments[0], lineNum); /* register */
+        printInt(0, 5); 
+        printInt(0, 5);
+        printInt(0, 5);
+        printInt(functCode, 6);
+        printf("\n");
 
     }
     /*  else if ( functCode == ??? )     // Handle sll and srl
@@ -156,6 +225,20 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
      *      // e.g., printIntInString(arguments[2], 5, lineNum);
      *  }
      */
+    else if ( functCode == 0 || functCode == 2)
+    {
+        printInt(0, 11);
+        printReg(arguments[1], lineNum);
+        printReg(arguments[0], lineNum);
+        printIntInString(arguments[2], 5, lineNum);
+
+        if ( functCode == 0 )
+            printInt(0, 6);
+        else 
+            printInt(2, 6);
+        
+        printf("\n");
+    }
     else                        /* Handle common format for add, etc. */
     {
         printDebug("funct %d \"%s\", \"%s\", and \"%s\"\n", functCode,
@@ -164,9 +247,11 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
         /* Print binary for the opcode, registers, shift amount,
          * and funct code.
          */
-        /* INCOMPLETE CODE ! */
         printInt(0, 6);
+        printReg(arguments[1], lineNum);
+        printReg(arguments[2], lineNum);
         printReg(arguments[0], lineNum);
+        printInt(0, 5);
         printInt(functCode, 6);
         printf("\n");
     }
@@ -200,8 +285,53 @@ void processIorJ(int lineNum, LabelTableArrayList * table,
      * the common format for addi, addiu, andi, etc.
      */
 
-    /* CODE MISSING ! */
+    if ( opcode == 2 || opcode == 3 )
+        numOperands = 1;
+    else if ( opcode == 15 )
+        numOperands = 2;
+    else
+        numOperands = 3;
 
-    printf(" is not implemented yet.\n");
+    /* Get arguments.  (Depending on instruction, should be 1, 2, or 3.) */
+    if ( ! getNTokens(restOfInstruction, numOperands, arguments) )
+    {
+        printError("Error on line %d: %s\n", lineNum, arguments[0]);
+        return;
+    }
+
+    /* J INSTRUCTIONS */
+    if ( opcode == 2 || opcode == 3 ) /* j and jal */
+    {
+        printJumpTarget( arguments[0], table, lineNum);
+    }
+    /* I INSTRUCTIONS */
+    else if ( opcode == 15 )    /* lui */
+    {
+        printInt(0, 5);
+        printReg(arguments[0], lineNum);
+        printIntInString(arguments[1], 16, lineNum);
+    }
+    else if ( opcode == 35 || opcode == 43 )    /* lw & sw */
+    {
+        printReg(arguments[2], lineNum);
+        printReg(arguments[0], lineNum);
+        printIntInString(arguments[1], 16, lineNum);
+    }
+    else 
+    {
+        if ( opcode == 4 || opcode == 5 )   /* beq & bne */
+        {
+            printReg(arguments[0], lineNum);
+            printReg(arguments[1], lineNum);
+            printBranchOffset(arguments[2] , table, PC, lineNum);
+        }
+        else
+        {
+            printReg(arguments[1], lineNum);
+            printReg(arguments[0], lineNum);
+            printIntInString(arguments[2], 16, lineNum);
+        }
+    }
+    printf("\n");
+    /* printf(" is not implemented yet.\n"); */
 }
-

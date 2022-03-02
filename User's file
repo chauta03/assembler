@@ -1,0 +1,10 @@
+Name of the Program: Assembler
+Directions of using: Run assembler with a input file. Could turn on 
+                    debuging to see more contents of the instructions.
+Program purpose: Read MIPS instructions and generate corresponding 
+                machine language instructions.
+Name: Chau Ta
+Date: 27/02/2022
+Modified: 03/01/2022
+    Reason: Update top-of-file comments and internal comments. 
+            Include signed version of printInt in PrintAsBinary

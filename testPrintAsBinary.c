@@ -4,6 +4,10 @@ int main()
     printf("About to partially test printInt:\n");
     printf("\t 5 = "); printInt(5, 3); printf(" (3 characters) \n");
     printf("\t 5 = "); printInt(5, 4); printf(" (4 characters) \n");
+    printf("\t 13 = "); printInt(13, 5); printf(" (5 characters) \n");
+    printf("\t -7 = "); printInt(-7, 5); printf(" (5 characters) \n");
+    printf("\t 33 = "); printInt(33, 5); printf(" (5 characters) \n");
+
 
     printf("About to partially test printIntInString:\n");
     printf("\t 5 = "); printIntInString("5", 3, 12); printf(" (3 characters) \n");
