@@ -19,7 +19,8 @@
  * Author: Chau Ta
  * Date:   28/02/22
  *
- * Modified by:  
+ * Modified by:  Chau Ta, 3/1/2022 - Replace printIntInString to Unsigned
+ *                                   and Signed version
  *
  */
 
@@ -225,12 +226,12 @@ void processR(int lineNum, int functCode, char * restOfInstruction)
      *      // e.g., printIntInString(arguments[2], 5, lineNum);
      *  }
      */
-    else if ( functCode == 0 || functCode == 2)
+    else if ( functCode == 0 || functCode == 2) /* sll & srl */
     {
         printInt(0, 11);
         printReg(arguments[1], lineNum);
         printReg(arguments[0], lineNum);
-        printIntInString(arguments[2], 5, lineNum);
+        printUnsignedIntInString(arguments[2], 5, lineNum);
 
         if ( functCode == 0 )
             printInt(0, 6);
@@ -309,13 +310,13 @@ void processIorJ(int lineNum, LabelTableArrayList * table,
     {
         printInt(0, 5);
         printReg(arguments[0], lineNum);
-        printIntInString(arguments[1], 16, lineNum);
+        printUnsignedIntInString(arguments[1], 16, lineNum);
     }
     else if ( opcode == 35 || opcode == 43 )    /* lw & sw */
     {
         printReg(arguments[2], lineNum);
         printReg(arguments[0], lineNum);
-        printIntInString(arguments[1], 16, lineNum);
+        printSignedIntInString(arguments[1], 16, lineNum);
     }
     else 
     {
@@ -329,7 +330,7 @@ void processIorJ(int lineNum, LabelTableArrayList * table,
         {
             printReg(arguments[1], lineNum);
             printReg(arguments[0], lineNum);
-            printIntInString(arguments[2], 16, lineNum);
+            printSignedIntInString(arguments[2], 16, lineNum);
         }
     }
     printf("\n");

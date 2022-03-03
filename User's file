@@ -5,6 +5,13 @@ Program purpose: Read MIPS instructions and generate corresponding
                 machine language instructions.
 Name: Chau Ta
 Date: 27/02/2022
-Modified: 03/01/2022
+Modified: 2/1/2022
     Reason: Update top-of-file comments and internal comments. 
             Include signed version of printInt in PrintAsBinary
+Modified: 2/1/2022
+    Reason: Accidentally git reset --hard
+Modified: 3/1/2022
+    Reason: Include new version of printAsBinary, testPrintAsBinary
+            assembler.h (include checking range for signed and 
+            unsigned numbers). 
+            Modify pass2 with signed and unsigned numbers

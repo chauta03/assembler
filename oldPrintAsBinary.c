@@ -18,19 +18,12 @@
  * Modification Log:
  *    - AB, 3/25/2020 - implement printIntInString, stub printInt,
  *                      provide skeletons for others
- *    - AB, 3/1/2022 -  replace previous printIntInString with
- *                      printSignedIntInString and printUnsignedIntInString.
- *                      New internal printIntInString does range checking.
- *    - CT, 3/1/2022 - complete printInt, printReg, printJumpTarget,
- *                      printBranchOffSet
  */
 
 /* Print integer value in pseudo-binary (made up of character '0's and '1's).
  *      @param value   value to print in pseudo-binary
  *      @param length  length of binary code needed, in bits
  *      @pre           value can be represented in `length` number of bits
- *      @pre           value >= 0
- *   (You can decide whether or not to require that `value` be non-negative.)
  */
 void printInt(int value, int length)
 {
@@ -43,6 +36,10 @@ void printInt(int value, int length)
      * When all testing has been completed, the printf statement
      * should be removed, commented out, or turned into a printDebug.
      */
+    
+    if (value > pow(2, length))
+        fprintf( stderr, "Trying to print <%i> as out of bound number. \n"
+        , value );
 
     printDebug(" (%d)", value);
 
@@ -77,6 +74,7 @@ void printInt(int value, int length)
             printf("1");
         powOf2 >>= 1; /* shift right 1 bit */
     }
+
 }
 
 
@@ -93,7 +91,7 @@ void printReg(char * regName, int lineNum)
      * Otherwise print "<invalid reg>" to stdout and an error message to
      * stderr.
      */
-
+    
     static char * regArray[] =
         {
                 "$zero",
@@ -123,85 +121,35 @@ void printReg(char * regName, int lineNum)
             , lineNum, regName );
 }
 
-/* Declare internal printIntInString used by both printSignedIntInString
- * and printUnsignedIntInString.
- */
-static void printIntInString(char * intInString, int numBits,
-        int lowerBound, int upperBound, int lineNum);
-
-/* Print signed value in `intInString` as pseudo-binary (made up of character
- * '0's and '1's).  Prints and error if the token in the string is not a
- * valid integer or if it is not in the range
- * -2^(numBits-1) <= integer < 2^(numBits-1).
- *      @param intInString   string containing integer, e.g., "23"
- *      @param length  length of binary code needed, in bits
- *      @param lineNum line number (for error messages)
- */
-void printSignedIntInString(char * intInString, int numBits, int lineNum)
-{
-    /* The decimal value should be in the asymmetric range:
-     *    -2^(numBits-1) <= integer < 2^(numBits-1).
-     */
-    int upperBound = 1 << (numBits - 1);
-    int lowerBound = -1 * upperBound;
-    printIntInString(intInString, numBits, lowerBound, upperBound, lineNum);
-}
-
-
-/* Print unsigned value in `intInString` as pseudo-binary (made up of character
- * '0's and '1's).  Prints and error if the token in the string is not a
- * valid integer or if it is not in the range 0 <= integer < 2^(numBits).
- *      @param intInString   string containing integer, e.g., "23"
- *      @param length  length of binary code needed, in bits
- *      @param lineNum line number (for error messages)
- */
-void printUnsignedIntInString(char * intInString, int numBits, int lineNum)
-{
-    int upperBound = 1 << numBits;
-    int lowerBound = 0;
-    printIntInString(intInString, numBits, lowerBound, upperBound, lineNum);
-}
-
 
 /* Print value in `intInString` as pseudo-binary (made up of character
- * '0's and '1's).  Prints an error if the token in the string is not a
- * valid integer or if it is not in the asymmetric range given by
- *  lowerBound <= value < upperBound
+ * '0's and '1's).
  *      @param intInString   string containing integer, e.g., "23"
- *      @param numBits length of binary code needed, in bits
- *      @param lowerBound lower bound; value should be >= lowerBound
- *      @param upperBound upper bound; value should be < upperBound
+ *      @param length  length of binary code needed, in bits
  *      @param lineNum line number (for error messages)
+ *      @pre           integer can be represented in `length` number of bits
+ *      @pre           integer >= 0
+ *   (You can decide whether or not to require that integer be non-negative.)
  */
-static void printIntInString(char * intInString, int numBits,
-        int lowerBound, int upperBound, int lineNum)
+void printIntInString(char * intInString, int numBits, int lineNum)
 {
     char * endPtr;
 
     /* Convert string to decimal (base 10) value. */
     int decimal = (int) strtol(intInString, &endPtr, 10);
 
-    /* If the string did not contain a valid int, print an error message. */
-    if ( *intInString == '\0' || *endPtr != '\0' )
-    {
-        printError("Line %d: trying to print %s as an int (%s).\n",
-                lineNum, intInString, "not a valid integer");
-        return;
-    }
-
-    /* If the decimal value is in range, print it.  Otherwise, print an
-     * error message.  The value should be in the asymmetric range:
-     *      lowerBound <= decimal < upperBound.
+    /* If the string contained a valid int, print it;
+     * otherwise print an error message.
      */
-    if ( decimal >= lowerBound && decimal < upperBound )
+    if ( *intInString != '\0' && *endPtr == '\0' )
     {
-        /* In range!  Print the value. */
+        /* entire string was valid */
         printInt(decimal, numBits);
     }
     else
     {
-        printError("Line %d: %s is not in range %d <= %s < %d.\n",
-                lineNum, intInString, lowerBound, intInString, upperBound);
+        printError("Line %d: trying to print %s as an int (%s).\n",
+                lineNum, intInString, "not a valid integer");
     }
 }
 
@@ -258,5 +206,5 @@ void printBranchOffset(char * targetLabel, LabelTableArrayList * table,
     else
         printInt( (labelAddr - PC) / 4, 16);    /* Calculate the 
                                                 portion of the address */
-
+    
 }

@@ -11,6 +11,7 @@
 #include <stdlib.h>     /* May need to be _stdlib.h on some machines. */
 #include <string.h>	/* Might be memory.h on some machines. */
 #include <ctype.h>
+#include <math.h>
 
 #include "LabelTableArrayList.h"
 #include "getToken.h"
@@ -34,8 +35,7 @@ void processR(int lineNum, int functCode, char * restOfInstruction);
 
 void printInt(int value, int length);
 void printReg(char * regName, int lineNum);
-void printSignedIntInString(char * intInString, int numBits, int lineNum);
-void printUnsignedIntInString(char * intInString, int numBits, int lineNum);
+void printIntInString(char * intInString, int numBits, int lineNum);
 void printJumpTarget(char * targetLabel, LabelTableArrayList * table,
                      int lineNum);
 void printBranchOffset(char * targetLabel, LabelTableArrayList * table,
