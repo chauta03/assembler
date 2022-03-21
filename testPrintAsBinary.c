@@ -14,6 +14,7 @@ int main()
     ERROR_LIMIT = 50;
 
     printf("About to partially test printInt:\n");
+    printf("\t 0 = "); printInt(0, 3); printf(" (3 characters) \n");
     printf("\t 5 = "); printInt(5, 3); printf(" (3 characters) \n");
     printf("\t 5 = "); printInt(5, 4); printf(" (4 characters) \n");
 

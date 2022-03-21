@@ -15,10 +15,6 @@
  *      table of instruction labels in pass 1. Machine language instructions
  *      will be generated based on provided MIPS instructions. Instructions
  *      are assumed to be 32 bits long.
- *      bytes long, with the first instruction starting at address 0.
- *      Labels that appear anywhere but at the beginning of a line are
- *      ignored.
- *
  *      For example, the following three lines of code would result in a
  *      table with one entry, indicating that label A_LABEL is at address 4.
  *                add $v0, $v1, $a0   # This instruction is at address 0
