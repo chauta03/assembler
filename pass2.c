@@ -21,6 +21,7 @@
  *
  * Modified by:  Chau Ta, 3/1/2022 - Replace printIntInString to Unsigned
  *                                   and Signed version
+ * Modified by: Chau Ta, 3/21/2022 - Print error by stderr rather than stdout
  *
  */
 
