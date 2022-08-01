@@ -1,12 +1,24 @@
-Replace this statement with external documentation that 
-a new user could use to know how (and why) to use your program.
-The
-[Assembler PP assignment](www.cs.kzoo.edu/cs230/Projects/AssemblerProj.html)
-states that the external documentation should
-include a description of your program, along with some
-sample input and sample output (which need not be the same as your
-test file(s), since the point of the sample input/output is
-to help with your description), and instructions on how to run the
-program.  The <a href="/CSShared/pgmStyle.html">Program Style Guide</a>
-has a little more information on what should be included in external
-documentation.
+Name of the Program: Assembler
+Directions of using: Run assembler with a input file. Could turn on 
+                    debuging to see more contents of the instructions.
+                    - Compile all the files: "make assembler"
+                    - To run the program: "./assembler <your MIPS file>"
+                    - If you want to turn on debugging enter:
+                        "./assembler <your MIPS file> 1"
+                        or
+                        "./assembler 1 <your MIPS file>"
+                    For example: "./assembler Chou.mips 1"
+Program purpose: Read MIPS instructions and generate corresponding 
+                machine language instructions.
+Name: Chau Ta
+Date: 27/02/2022
+Modified: 2/1/2022
+    Reason: Update top-of-file comments and internal comments. 
+            Include signed version of printInt in PrintAsBinary
+Modified: 2/1/2022
+    Reason: Accidentally git reset --hard
+Modified: 3/1/2022
+    Reason: Include new version of printAsBinary, testPrintAsBinary
+            assembler.h (include checking range for signed and 
+            unsigned numbers). 
+            Modify pass2 with signed and unsigned numbers
